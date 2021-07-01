@@ -1,6 +1,6 @@
 from tkinter import *
 import os
-import keyboard
+
 from PIL import Image, ImageTk
 from tkinter import ttk, messagebox
 import mysql.connector
@@ -25,7 +25,7 @@ class Student:
         self.rootwindow.title("Student-Details")
         # os.chdir("/usr/app/")
         # BackGround Details
-        img = Image.open("Images/studentdetails.jpg")
+        img = Image.open("Images\studentdetails.jpg")
         img = img.resize((1530, 710))
         self.photoimg = ImageTk.PhotoImage(img)
         background_image = Label(self.rootwindow, image=self.photoimg)

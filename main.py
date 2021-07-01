@@ -7,7 +7,8 @@ from StudentDetails import Student
 from TrainData import Train
 
 from Facerec import Facerec
-import os
+
+
 
 class FaceRecognition:
 
@@ -52,7 +53,8 @@ class FaceRecognition:
         FaceRecognitionImage = FaceRecognitionImage.resize((220, 220))
         self.FaceRecognitionImage = ImageTk.PhotoImage(FaceRecognitionImage)
 
-        FaceRecognitionImage = Button(background_image, command=self.Facerecbutton,image=self.FaceRecognitionImage, cursor="hand2")
+        FaceRecognitionImage = Button(background_image, command=self.Facerecbutton, image=self.FaceRecognitionImage,
+                                      cursor="hand2")
         FaceRecognitionImage.place(x=1000, y=100)
 
         # # Images Gallery Button
