@@ -284,12 +284,12 @@ class Facerec:
                                 self.attendence(identiyed[0], identiyed[1], identiyed[2], imgNames[index], "Attendance.csv")
                                 cv2.putText(frame, f"Name:{identiyed[0]}", (x, y - 70), cv2.FONT_HERSHEY_COMPLEX, 0.7,
                                             (255, 0, 0), 2)
-                    # draw the label and bounding box on the frame
-                    # label = "{}: {:.4f}".format(label, preds[j])
-                    # cv2.putText(frame, label, (startX, startY - 10),
-                    #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-                    # cv2.rectangle(frame, (startX, startY), (endX, endY),
-                    #               (0, 0, 255), 2)
+                            # draw the label and bounding box on the frame
+                            label = "{}: {:.4f}".format(label, preds[j])
+                            cv2.putText(frame, label, (startX, startY - 10),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                            cv2.rectangle(frame, (startX, startY), (endX, endY),
+                                          (0, 0, 255), 2)
             # show the output frame and wait for a key press
             cv2.imshow("Frame", frame)
             key = cv2.waitKey(1) & 0xFF

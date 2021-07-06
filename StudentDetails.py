@@ -2,7 +2,7 @@ from tkinter import *
 import os
 
 from PIL import Image, ImageTk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 import mysql.connector
 import cv2
 
@@ -167,6 +167,12 @@ class Student:
                             cursor="hand2", width=25)
         upload_pic.place(x=500, y=50)
 
+        upload_raw_pic = Button(Personal_Details, command=self.Get_raw_photos, text="Upload Raw Photos [Min 3 photos]",
+                                font=("times new roman", 12, "bold"),
+                                bg="green", fg="white",
+                                cursor="hand2", width=25)
+        upload_raw_pic.place(x=500, y=90)
+
         save_button = Button(Personal_Details, text="Save", command=self.Insert_Details,
                              font=("times new roman", 12, "bold"), bg="blue", fg="white", cursor="hand2", width=15)
         save_button.place(x=13, y=135)
@@ -202,34 +208,34 @@ class Student:
         left_Lable = Label(Right_frame, image=self.Search_image)
         left_Lable.place(x=35, y=0)
 
-        SearchFrame = LabelFrame(Right_frame, bd=2, relief=RIDGE, bg="white", text="Search Details",
-                                 font=("times new roman", 12, "bold"))
-        SearchFrame.place(x=0, y=155, width=500, height=60)
-
-        Seach_lable = Label(SearchFrame, text="Search By : ", font=("times new roman", 10, "bold"), bg="white",
-                            fg="dark green")
-        Seach_lable.grid(row=0, column=0, padx=5, pady=3, sticky=W)
-
-        Search_label = ttk.Combobox(SearchFrame, font=("times new roman", 10, "bold"), width=10, state="readonly")
-        Search_label["values"] = (
-            "Select key", "StudentId", "PhoneNo")
-        Search_label.current(0)
-        Search_label.grid(row=0, column=1, padx=2, pady=10, sticky=W)
-
-        # Entry
-        Search_entry = ttk.Entry(SearchFrame, font=("times new roman", 10, "bold"), width=11)
-        Search_entry.grid(row=0, column=2, padx=2, pady=10)
-
-        # buttons
-        Search_btn = Button(SearchFrame, text="Search", font=("times new roman", 10, "bold"), bg="blue",
-                            fg="white",
-                            cursor="hand2", width=10)
-        Search_btn.grid(row=0, column=3, padx=5)
-
-        Search_all = Button(SearchFrame, text="Show-All", font=("times new roman", 10, "bold"), bg="blue",
-                            fg="white",
-                            cursor="hand2", width=10)
-        Search_all.grid(row=0, column=4, padx=5)
+        # SearchFrame = LabelFrame(Right_frame, bd=2, relief=RIDGE, bg="white", text="Search Details",
+        #                          font=("times new roman", 12, "bold"))
+        # SearchFrame.place(x=0, y=155, width=500, height=60)
+        #
+        # Seach_lable = Label(SearchFrame, text="Search By : ", font=("times new roman", 10, "bold"), bg="white",
+        #                     fg="dark green")
+        # Seach_lable.grid(row=0, column=0, padx=5, pady=3, sticky=W)
+        #
+        # Search_label = ttk.Combobox(SearchFrame, font=("times new roman", 10, "bold"), width=10, state="readonly")
+        # Search_label["values"] = (
+        #     "Select key", "StudentId", "PhoneNo")
+        # Search_label.current(0)
+        # Search_label.grid(row=0, column=1, padx=2, pady=10, sticky=W)
+        #
+        # # Entry
+        # Search_entry = ttk.Entry(SearchFrame, font=("times new roman", 10, "bold"), width=11)
+        # Search_entry.grid(row=0, column=2, padx=2, pady=10)
+        #
+        # # buttons
+        # Search_btn = Button(SearchFrame, text="Search", font=("times new roman", 10, "bold"), bg="blue",
+        #                     fg="white",
+        #                     cursor="hand2", width=10)
+        # Search_btn.grid(row=0, column=3, padx=5)
+        #
+        # Search_all = Button(SearchFrame, text="Show-All", font=("times new roman", 10, "bold"), bg="blue",
+        #                     fg="white",
+        #                     cursor="hand2", width=10)
+        # Search_all.grid(row=0, column=4, padx=5)
 
         # table frame to show search details
         table_frame = Frame(Right_frame, bd=2, bg="white", relief=RIDGE)
@@ -400,6 +406,9 @@ class Student:
         os.environ['OPENCV_VIDEOIO_PRIORITY_MSMF'] = '0'
         messagebox.showinfo("Instructions", "Click Space Bar to take Picture and ESC to close", parent=self.rootwindow)
         try:
+            if self.var_stdId.get() == "":
+                messagebox.showinfo("Error", "Please provide Student Id", parent=self.rootwindow)
+                return
 
             directory = str(self.var_stdId.get())
             parent_dir = "InputData"
@@ -407,9 +416,9 @@ class Student:
             os.mkdir(path)
             directory = r"InputData/" + str(self.var_stdId.get())
 
-
             face_classifer = cv2.CascadeClassifier("DataSetsPre/haarcascade_frontalface_default.xml")
             os.chdir(directory)
+
             def Crop(img):
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 faces = face_classifer.detectMultiScale(gray, 1.3, 5)
@@ -444,6 +453,32 @@ class Student:
             messagebox.showinfo("Result", "photos captured", parent=self.rootwindow)
         except Exception as i:
             messagebox.showinfo("Error", f"Due to {str(i)} ", parent=self.rootwindow)
+
+    def Get_raw_photos(self):
+        if self.var_stdId.get() == "":
+            messagebox.showinfo("Error", "Please provide Student Id", parent=self.rootwindow)
+            return
+        delete = messagebox.askyesno("User Option",
+                                     "Use this option only when there is low intensity of light",
+                                     parent=self.rootwindow)
+        if delete > 0:
+            files = filedialog.askopenfilenames(initialdir=r"C:\Users\santosh\OneDrive\Pictures\Camera Roll",
+                                                title="Select "
+                                                      "Files",
+                                                filetypes=(("png", "*.png"), ("jpeg", "*.jpeg"), ("jpg", "*.jpg")),
+                                                parent=self.rootwindow)
+            directory = str(self.var_stdId.get())
+            parent_dir = "InputData"
+            path = os.path.join(parent_dir, directory)
+            os.mkdir(path)
+            for i in range(len(files)):
+                img = cv2.imread(files[i])
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                cv2.imwrite(r"InputData/" + str(self.var_stdId.get()) + "/" + str(self.var_stdId.get()) + "_" + str(
+                    i) + ".jpeg",
+                            img)
+        else:
+            return
 
 
 if __name__ == "__main__":

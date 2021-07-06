@@ -1,3 +1,4 @@
+import os
 from tkinter import *
 
 from PIL import Image, ImageTk
@@ -7,6 +8,8 @@ from StudentDetails import Student
 from TrainData import Train
 
 from Facerec import Facerec
+
+from Developers import Devs
 
 
 
@@ -58,20 +61,28 @@ class FaceRecognition:
         FaceRecognitionImage.place(x=1000, y=100)
 
         # # Images Gallery Button
-        # ImagesButton = Image.open(
-        #     "Images/photogallery.png")
-        # ImagesButton = ImagesButton.resize((220, 220))
-        # self.ImagesButton = ImageTk.PhotoImage(ImagesButton)
-        #
-        # ImagesButton = Button(background_image, image=self.ImagesButton, cursor="hand2")
-        # ImagesButton.place(x=1000, y=400)
+        ImagesButton = Image.open(
+            "Images/photogallery.png")
+        ImagesButton = ImagesButton.resize((220, 220))
+        self.ImagesButton = ImageTk.PhotoImage(ImagesButton)
+
+        ImagesButton = Button(background_image, image=self.ImagesButton, cursor="hand2", command=self.open_dataset)
+        ImagesButton.place(x=1000, y=400)
 
         # Computer Eye Image Just for show No functionality Provided.
-        ComputerEye = Image.open("Images/Computer Eye.png")
-        ComputerEye = ComputerEye.resize((220, 220))
-        self.ComputerEye = ImageTk.PhotoImage(ComputerEye)
-        ComputerEye = Label(background_image, image=self.ComputerEye)
-        ComputerEye.place(x=600, y=250)
+        # ComputerEye = Image.open("Images/devs.jpg")
+        # ComputerEye = ComputerEye.resize((230, 250))
+        # self.ComputerEye = ImageTk.PhotoImage(ComputerEye)
+        # ComputerEye = Label(background_image, image=self.ComputerEye)
+        # ComputerEye.place(x=600, y=250)
+
+        devsButton = Image.open(
+            "Images/devs.jpg")
+        devsButton = devsButton.resize((220, 220))
+        self.devsButton = ImageTk.PhotoImage(devsButton)
+
+        devsButton = Button(background_image, image=self.devsButton, cursor="hand2",command=self.Devsbutton)
+        devsButton.place(x=600, y=250)
 
     # Button Functions
     def student_details(self):
@@ -85,6 +96,12 @@ class FaceRecognition:
     def Facerecbutton(self):
         self.faceWindow = Toplevel(self.rootwindow)
         self.app1 = Facerec(self.faceWindow)
+
+    def Devsbutton(self):
+        self.devsWindow = Toplevel(self.rootwindow)
+        self.app1 = Devs(self.devsWindow)
+    def open_dataset(self):
+        os.startfile("InputData")
 
 
 if __name__ == "__main__":
