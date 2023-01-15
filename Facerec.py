@@ -16,14 +16,15 @@ from tensorflow.keras.models import load_model
 
 os.environ['OPENCV_VIDEOIO_PRIORITY_MSMF'] = '0'
 
-
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 class Facerec:
 
     def __init__(self, rootwindow):
         self.rootwindow = rootwindow
         self.rootwindow.geometry("500x500+0+0")
         self.rootwindow.title("FaceRecognition")
-        img = Image.open(r"C:\Users\santosh\PycharmProjects\MainProject\Images\TraindataImage.jpg")
+        ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+        img = Image.open(ROOT_DIR + "\Images\TraindataImage.jpg")
         img = img.resize((500, 500))
         self.photoimg = ImageTk.PhotoImage(img)
         background_image = Label(self.rootwindow, image=self.photoimg)
@@ -182,8 +183,8 @@ class Facerec:
 
         # load the liveness detector model and label encoder from disk
         print("[INFO] loading liveness detector...")
-        model = load_model('model/liveness.model')
-        le = pickle.loads(open('model/le.pickle', "rb").read())
+        model = load_model(os.path.sep.join(['model', "liveness.model"]))
+        le = pickle.loads(open(os.path.sep.join(['model', "le.pickle"]), "rb").read())
 
         # initialize the video stream and allow the camera sensor to warmup
         print("[INFO] starting video stream...")
@@ -193,7 +194,7 @@ class Facerec:
         x, y, w, h = 0, 0, 0, 0
         # loop over the frames from the video stream
         while True:
-            identiyed = [" "," "," "]
+            identiyed = [" ", " ", " "]
             # grab the frame from the threaded video stream and resize it
             # to have a maximum width of 600 pixels
             frame = vs.read()
@@ -281,7 +282,8 @@ class Facerec:
                                 cv2.imwrite("FRAUD\Frames\FraudFraud" + str(c) + ".png", frame)
                                 cv2.imwrite("FRAUD\Faces\Face" + str(k) + ".png", face2)
                             else:
-                                self.attendence(identiyed[0], identiyed[1], identiyed[2], imgNames[index], "Attendance.csv")
+                                self.attendence(identiyed[0], identiyed[1], identiyed[2], imgNames[index],
+                                                "Attendance.csv")
                                 cv2.putText(frame, f"Name:{identiyed[0]}", (x, y - 70), cv2.FONT_HERSHEY_COMPLEX, 0.7,
                                             (255, 0, 0), 2)
                             # draw the label and bounding box on the frame
